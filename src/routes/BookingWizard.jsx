@@ -11,17 +11,17 @@ import ScrollToTopOnMount from '../components/ScrollToTopOnMount';
 class BookingWizard extends React.PureComponent {
   componentDidMount() {
     const {
-      hotel, guestData, hotelBookingData, customerData,
+      ancillary, guestData, ancillaryBookingData, customerData,
       estimates, history,
     } = this.props;
-    if (!hotel || !guestData || !hotelBookingData || !customerData || !estimates) {
+    if (!ancillary || !guestData || !ancillaryBookingData || !customerData || !estimates) {
       history.push('/');
     }
   }
 
   render() {
     const {
-      hotel, guestData, hotelBookingData, customerData,
+      ancillary, guestData, ancillaryBookingData, customerData,
       estimates, handleBookingFormSubmit, error,
     } = this.props;
 
@@ -39,12 +39,12 @@ class BookingWizard extends React.PureComponent {
     return (
       <React.Fragment>
         <ScrollToTopOnMount />
-        {guestData && hotel && estimates && customerData && (
+        {guestData && ancillary && estimates && customerData && (
           <BookingForm
             guestData={guestData}
             error={error}
-            hotelBookingData={hotelBookingData}
-            hotel={hotel}
+            ancillaryBookingData={ancillaryBookingData}
+            ancillary={ancillary}
             estimates={estimates}
             customerData={customerData}
             handleBookingFormSubmit={handleBookingFormSubmit}
@@ -56,19 +56,19 @@ class BookingWizard extends React.PureComponent {
 }
 
 BookingWizard.defaultProps = {
-  hotel: undefined,
+  ancillary: undefined,
   guestData: undefined,
   estimates: [],
-  hotelBookingData: undefined,
+  ancillaryBookingData: undefined,
   customerData: undefined,
   error: undefined,
 };
 
 BookingWizard.propTypes = {
-  hotel: PropTypes.instanceOf(Object),
+  ancillary: PropTypes.instanceOf(Object),
   guestData: PropTypes.instanceOf(Object),
   estimates: PropTypes.instanceOf(Array),
-  hotelBookingData: PropTypes.instanceOf(Object),
+  ancillaryBookingData: PropTypes.instanceOf(Object),
   customerData: PropTypes.instanceOf(Object),
   handleBookingFormSubmit: PropTypes.func.isRequired,
   history: PropTypes.instanceOf(Object).isRequired,
@@ -77,14 +77,14 @@ BookingWizard.propTypes = {
 
 export default connect(
   (state) => {
-    const hotelBookingData = selectors.booking.getHotelData(state);
-    const getHotelById = selectors.hotels.makeGetHotelById();
+    const ancillaryBookingData = selectors.booking.getAncillaryData(state);
+    const getAncillaryById = selectors.ancillaries.makeGetAncillaryById();
     return {
-      hotel: getHotelById(state, hotelBookingData.id),
-      estimates: selectors.estimates.getCurrentByHotelId(state, hotelBookingData.id),
+      ancillary: getAncillaryById(state, ancillaryBookingData.id),
+      estimates: selectors.estimates.getCurrentByAncillaryId(state, ancillaryBookingData.id),
       guestData: selectors.booking.getGuestData(state),
       customerData: selectors.booking.getCustomerData(state),
-      hotelBookingData,
+      ancillaryBookingData,
       error: selectors.errors.getBooking(state),
     };
   },

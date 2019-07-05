@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import RoomType from './room-type';
 
-const RoomTypes = ({ hotel, estimates, onBookRoomTypeClicked }) => {
-  if (!hotel.roomTypes) {
+const RoomTypes = ({ ancillary, estimates, onBookRoomTypeClicked }) => {
+  if (!ancillary.roomTypes) {
     return [];
   }
-  return hotel.roomTypes
+  return ancillary.roomTypes
     .map((rt, index) => (
       <RoomType
-        hotel={hotel}
+        ancillary={ancillary}
         key={rt.id}
         roomType={rt}
         estimate={estimates.find(e => e.id === rt.id)}
@@ -21,7 +21,7 @@ const RoomTypes = ({ hotel, estimates, onBookRoomTypeClicked }) => {
 
 
 RoomTypes.propTypes = {
-  hotel: PropTypes.instanceOf(Object).isRequired,
+  ancillary: PropTypes.instanceOf(Object).isRequired,
   estimates: PropTypes.instanceOf(Array).isRequired,
   onBookRoomTypeClicked: PropTypes.func.isRequired,
 };

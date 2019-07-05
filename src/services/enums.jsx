@@ -1,18 +1,7 @@
-export const hotelCategory = {
-  apartment: 'Apartment',
-  'bed and breakfast': 'Bed and breakfast',
-  boat: 'Boat',
-  cabin: 'Cabin',
-  camp: 'Camp',
-  'holiday home': 'Holiday home',
-  hostel: 'Hostel',
-  hotel: 'Hotel',
-  house: 'House',
-  inn: 'Inn',
-  'mobile home': 'Mobile home',
-  motel: 'Motel',
-  other: 'Other',
-  spa: 'Spa',
+export const ancillaryCategory = {
+  trip: 'Trip',
+  flight: 'Flight',
+  destination: 'Destination',
 };
 
 export const roomTypeCategory = {
@@ -47,6 +36,6 @@ export const roomTypeCategory = {
 };
 
 export default {
-  hotelCategory,
+  ancillaryCategory,
   roomTypeCategory,
 };

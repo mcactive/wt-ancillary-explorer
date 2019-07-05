@@ -16,20 +16,9 @@ const Header = ({ location }) => {
           <div className="collapse navbar-collapse" id="navbar-content">
             <ul className="navbar-nav ml-auto" id="navbar-nav">
               <li className="nav-item">
-                <NavLink className="nav-link" exact to="/">Browse Hotels</NavLink>
-              </li>
-              <li className="nav-item">
-                <NavLink className="nav-link" exact to="/search-on-map">Search on map</NavLink>
+                <NavLink className="nav-link" exact to="/">Browse Ancillaries</NavLink>
               </li>
             </ul>
-            {showGetEstimates
-            && (
-            <div className="ml-lg-1">
-              <button className="btn btn-block btn-primary" id="navbar-btn" type="button" data-toggle="collapse" data-target="#form-estimates" aria-expanded="false" aria-controls="form-estimates">
-              Get Estimates!
-              </button>
-            </div>
-            )}
           </div>
         </div>
       </nav>

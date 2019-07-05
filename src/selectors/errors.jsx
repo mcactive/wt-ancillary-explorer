@@ -1,5 +1,5 @@
-export function getByHotelId(state, hotelId) {
-  return state.errors.hotels[hotelId];
+export function getByAncillaryId(state, ancillaryId) {
+  return state.errors.ancillaries[ancillaryId];
 }
 
 export function getGlobal(state) {
@@ -15,7 +15,7 @@ export function getSearch(state) {
 }
 
 export default {
-  getByHotelId,
+  getByAncillaryId,
   getGlobal,
   getBooking,
   getSearch,

@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import ImageList from '../ImageList';
-import { HotelContacts, Contact } from '../HotelContacts';
+import { AncillaryContacts, Contact } from '../AncillaryContacts';
 import CancellationForm from '../CancellationForm';
-import { Address, LocationMap } from '../HotelLocation';
+import { Address, LocationMap } from '../AncillaryLocation';
 
-const HotelInfoBox = ({ hotel, handleCancellationFormSubmit }) => (
+const AncillaryInfoBox = ({ hotel, handleCancellationFormSubmit }) => (
   <div className="row">
     <div className="col-md-12 bg-light rounded p-2 mt-1">
       <div className="row">
@@ -32,7 +32,7 @@ const HotelInfoBox = ({ hotel, handleCancellationFormSubmit }) => (
         <div className="col-lg-4">
           <Address name={hotel.name} address={hotel.address} />
           <h5 className="mt-1">Contact</h5>
-          <HotelContacts contacts={hotel.contacts} />
+          <AncillaryContacts contacts={hotel.contacts} />
         </div>
       </div>
       {hotel.operator && (
@@ -69,13 +69,13 @@ const HotelInfoBox = ({ hotel, handleCancellationFormSubmit }) => (
   </div>
 );
 
-HotelInfoBox.defaultProps = {
+AncillaryInfoBox.defaultProps = {
   handleCancellationFormSubmit: undefined,
 };
 
-HotelInfoBox.propTypes = {
+AncillaryInfoBox.propTypes = {
   hotel: PropTypes.instanceOf(Object).isRequired,
   handleCancellationFormSubmit: PropTypes.func,
 };
 
-export default HotelInfoBox;
+export default AncillaryInfoBox;

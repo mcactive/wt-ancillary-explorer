@@ -29,20 +29,20 @@ export const setGuestData = ({ arrival, departure, guests }) => (dispatch) => {
   });
 };
 
-export const addRoomType = ({ hotelId, roomTypeId }) => (dispatch) => {
+export const addRoomType = ({ ancillaryId, roomTypeId }) => (dispatch) => {
   dispatch({
     type: 'ADD_ROOM_TYPE',
     payload: {
-      hotelId,
+      ancillaryId,
       roomTypeId,
     },
   });
 };
 
-export const determineCancellationFees = ({ hotelId }) => (dispatch, getState) => {
+export const determineCancellationFees = ({ ancillaryId }) => (dispatch, getState) => {
   const state = getState();
-  const hotel = state.hotels.list.find(h => h.id === hotelId);
-  if (!hotel) {
+  const ancillary = state.ancillaries.list.find(h => h.id === ancillaryId);
+  if (!ancillary) {
     return;
   }
   if (!state.booking || !state.booking.guest || !state.booking.guest.helpers) {
@@ -52,13 +52,13 @@ export const determineCancellationFees = ({ hotelId }) => (dispatch, getState) =
   const fees = cancellationFees.computeCancellationFees(
     dayjs(), // today
     arrivalDayjs,
-    hotel.cancellationPolicies,
-    hotel.defaultCancellationAmount,
+    ancillary.cancellationPolicies,
+    ancillary.defaultCancellationAmount,
   );
   dispatch({
     type: 'SET_CANCELLATION_FEES',
     payload: {
-      hotelId,
+      ancillaryId,
       fees,
     },
   });
@@ -147,8 +147,8 @@ export const sendBooking = createActionThunk('SEND_BOOKING', async ({ bookingDat
 
 export const submitBooking = values => (dispatch, getState) => {
   const state = getState();
-  const hotel = state.hotels.list.find(h => h.id === values.hotelId);
-  if (!hotel || !hotel.bookingUri) {
+  const ancillary = state.ancillaries.list.find(h => h.id === values.ancillaryId);
+  if (!ancillary || !ancillary.bookingUri) {
     return;
   }
   dispatch({
@@ -165,7 +165,7 @@ export const submitBooking = values => (dispatch, getState) => {
   });
   const { ...bookingData } = values;
   dispatch(sendBooking({
-    bookingUri: hotel.bookingUri,
+    bookingUri: ancillary.bookingUri,
     bookingData,
   }));
 };

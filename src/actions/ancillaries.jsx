@@ -36,7 +36,7 @@ const DETAIL_FIELDS = [
   'bookingUri',
   'contacts',
   'address',
-  'amenities',
+  'Ancillaries',
   'tags',
   'defaultCancellationAmount',
   'cancellationPolicies',
@@ -64,25 +64,25 @@ export const translateNetworkError = (status, code, message) => {
   return e;
 };
 
-export const fetchHotelsList = createActionThunk('FETCH_LIST', ({ getState }) => {
+export const fetchAncillariesList = createActionThunk('FETCH_LIST', ({ getState }) => {
   let url = `${window.env.WT_READ_API}/hotels?fields=${LIST_FIELDS.join(',')}&limit=${LIMIT}`;
   const state = getState();
-  if (state.hotels.next) {
-    url = state.hotels.next;
+  if (state.ancillaries.next) {
+    url = state.ancillaries.next;
   }
   return fetch(url).then((response) => {
     if (response.status > 299) {
-      throw translateNetworkError(response.status, 'missingHotel', 'Cannot get hotel list!');
+      throw translateNetworkError(response.status, 'missingAncillary', 'Cannot get ancillary list!');
     }
     return response.json();
   });
 });
 
-export const fetchHotelDetail = createActionThunk('FETCH_DETAIL', ({ id }) => {
+export const fetchAncillaryDetail = createActionThunk('FETCH_DETAIL', ({ id }) => {
   const url = `${window.env.WT_READ_API}/hotels/${id}?fields=${DETAIL_FIELDS.join(',')}`;
   return fetch(url).then((response) => {
     if (response.status > 299) {
-      throw translateNetworkError(response.status, id, 'Cannot get hotel detail!');
+      throw translateNetworkError(response.status, id, 'Cannot get ancillary detail!');
     }
     if (response.headers.get('x-data-validation-warning')) {
       // Don't show data with warnings for now
@@ -92,35 +92,35 @@ export const fetchHotelDetail = createActionThunk('FETCH_DETAIL', ({ id }) => {
   });
 });
 
-export const eventuallyResolveErroredHotels = () => (dispatch, getState) => {
+export const eventuallyResolveErroredAncillaries = () => (dispatch, getState) => {
   setTimeout(() => {
-    const { hotels } = getState();
-    const freshErroredHotelIds = Object.keys(hotels.erroredHotels).filter(id => hotels.erroredHotels[id] === 'fresh');
-    if (freshErroredHotelIds.length) {
-      for (let i = 0; i < freshErroredHotelIds.length; i += 1) {
+    const { ancillaries } = getState();
+    const freshErroredAncillaryIds = Object.keys(ancillaries.erroredAncillaries).filter(id => ancillaries.erroredAncillaries[id] === 'fresh');
+    if (freshErroredAncillaryIds.length) {
+      for (let i = 0; i < freshErroredAncillaryIds.length; i += 1) {
         dispatch({
-          type: 'REFETCH_ERRORED_HOTEL_STARTED',
+          type: 'REFETCH_ERRORED_ANCILLARY_STARTED',
           payload: {
-            id: freshErroredHotelIds[i],
+            id: freshErroredAncillaryIds[i],
           },
         });
-        dispatch(fetchHotelDetail({
-          id: freshErroredHotelIds[i],
+        dispatch(fetchAncillaryDetail({
+          id: freshErroredAncillaryIds[i],
           dispatch,
         })).catch(() => {}); // silent catch to prevent error leaking into console
       }
-      dispatch(eventuallyResolveErroredHotels());
+      dispatch(eventuallyResolveErroredAncillaries());
     }
   }, ERRORED_REFRESH_TIMEOUT);
 };
 
 
-export const fetchHotelRatePlans = createActionThunk('FETCH_HOTEL_RATE_PLANS', ({ id }) => {
+export const fetchAncillaryRatePlans = createActionThunk('FETCH_ANCILLARY_RATE_PLANS', ({ id }) => {
   const url = `${window.env.WT_READ_API}/hotels/${id}/ratePlans`;
   return fetch(url)
     .then((response) => {
       if (response.status > 299) {
-        throw translateNetworkError(response.status, id, 'Cannot get hotel rate plans!');
+        throw translateNetworkError(response.status, id, 'Cannot get ancillary rate plans!');
       }
       return response.json();
     })
@@ -130,12 +130,12 @@ export const fetchHotelRatePlans = createActionThunk('FETCH_HOTEL_RATE_PLANS', (
     }));
 });
 
-export const fetchHotelAvailability = createActionThunk('FETCH_HOTEL_AVAILABILITY', ({ id }) => {
+export const fetchAncillaryAvailability = createActionThunk('FETCH_ANCILLARY_AVAILABILITY', ({ id }) => {
   const url = `${window.env.WT_READ_API}/hotels/${id}/availability`;
   return fetch(url)
     .then((response) => {
       if (response.status > 299) {
-        throw translateNetworkError(response.status, id, 'Cannot get hotel availability!');
+        throw translateNetworkError(response.status, id, 'Cannot get ancillary availability!');
       }
       return response.json();
     })
@@ -148,12 +148,12 @@ export const fetchHotelAvailability = createActionThunk('FETCH_HOTEL_AVAILABILIT
     }));
 });
 
-export const fetchHotelRoomTypes = createActionThunk('FETCH_HOTEL_ROOM_TYPES', ({ id }) => {
+export const fetchAncillaryRoomTypes = createActionThunk('FETCH_ANCILLARY_ROOM_TYPES', ({ id }) => {
   const url = `${window.env.WT_READ_API}/hotels/${id}/roomTypes`;
   return fetch(url)
     .then((response) => {
       if (response.status > 299) {
-        throw translateNetworkError(response.status, id, 'Cannot get hotel room types!');
+        throw translateNetworkError(response.status, id, 'Cannot get ancillary room types!');
       }
       return response.json();
     })
@@ -164,10 +164,10 @@ export const fetchHotelRoomTypes = createActionThunk('FETCH_HOTEL_ROOM_TYPES', (
 });
 
 export default {
-  fetchHotelsList,
-  fetchHotelDetail,
-  fetchHotelRatePlans,
-  fetchHotelAvailability,
-  fetchHotelRoomTypes,
-  eventuallyResolveErroredHotels,
+  fetchAncillariesList,
+  fetchAncillaryDetail,
+  fetchAncillaryRatePlans,
+  fetchAncillaryAvailability,
+  fetchAncillaryRoomTypes,
+  eventuallyResolveErroredAncillaries,
 };

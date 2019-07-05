@@ -6,10 +6,10 @@ import PropTypes from 'prop-types';
 import selectors from '../selectors';
 import actions from '../actions';
 import Loader from '../components/Loader';
-import HotelDetail from '../components/HotelDetail';
+import AncillaryDetail from '../components/AncillaryDetail';
 import ScrollToTopOnMount from '../components/ScrollToTopOnMount';
 
-class Hotel extends React.PureComponent {
+class Ancillary extends React.PureComponent {
   constructor(props) {
     super(props);
     this.startBookingWizard = this.startBookingWizard.bind(this);
@@ -17,10 +17,10 @@ class Hotel extends React.PureComponent {
 
   componentDidMount() {
     const {
-      fetchHotelDetail, match, hotel, history,
+      fetchAncillaryDetail, match, ancillary, history,
     } = this.props;
-    if (!hotel || (!hotel.hasDetailLoaded && !hotel.hasDetailLoading)) {
-      fetchHotelDetail({ id: match.params.hotelId }).catch(() => {
+    if (!ancillary || (!ancillary.hasDetailLoaded && !ancillary.hasDetailLoading)) {
+      fetchAncillaryDetail({ id: match.params.ancillaryId }).catch(() => {
         history.push('/error-page');
       });
     }
@@ -34,18 +34,18 @@ class Hotel extends React.PureComponent {
 
   render() {
     const {
-      hotel, estimates, errors,
+      ancillary, estimates, errors,
       handleGuestFormSubmit, guestFormInitialValues,
       handleCancellationFormSubmit,
     } = this.props;
     return (
       <Fragment>
         <ScrollToTopOnMount />
-        {(!hotel || hotel.hasDetailLoading || !hotel.hasDetailLoaded)
-          ? <Loader block={200} label="Loading hotel from API..." />
+        {(!ancillary || ancillary.hasDetailLoading || !ancillary.hasDetailLoaded)
+          ? <Loader block={200} label="Loading ancillary from API..." />
           : (
-            <HotelDetail
-              hotel={hotel}
+            <AncillaryDetail
+              ancillary={ancillary}
               estimates={estimates}
               errors={errors}
               guestFormInitialValues={guestFormInitialValues}
@@ -59,18 +59,18 @@ class Hotel extends React.PureComponent {
   }
 }
 
-Hotel.defaultProps = {
-  hotel: undefined,
+Ancillary.defaultProps = {
+  ancillary: undefined,
   estimates: [],
   errors: [],
 };
 
-Hotel.propTypes = {
+Ancillary.propTypes = {
   match: PropTypes.instanceOf(Object).isRequired,
-  hotel: PropTypes.instanceOf(Object),
+  ancillary: PropTypes.instanceOf(Object),
   estimates: PropTypes.instanceOf(Array),
   errors: PropTypes.instanceOf(Array),
-  fetchHotelDetail: PropTypes.func.isRequired,
+  fetchAncillaryDetail: PropTypes.func.isRequired,
   handleGuestFormSubmit: PropTypes.func.isRequired,
   guestFormInitialValues: PropTypes.instanceOf(Object).isRequired,
   handleBookRoomTypeClicked: PropTypes.func.isRequired,
@@ -80,17 +80,17 @@ Hotel.propTypes = {
 
 export default withRouter(connect(
   (state, ownProps) => {
-    const getHotelById = selectors.hotels.makeGetHotelById();
-    const { hotelId } = ownProps.match.params;
+    const getAncillaryById = selectors.ancillaries.makeGetAncillaryById();
+    const { ancillaryId } = ownProps.match.params;
     return {
-      hotel: getHotelById(state, hotelId),
-      estimates: selectors.estimates.getCurrentByHotelId(state, hotelId),
-      errors: selectors.errors.getByHotelId(state, hotelId),
+      ancillary: getAncillaryById(state, ancillaryId),
+      estimates: selectors.estimates.getCurrentByAncillaryId(state, ancillaryId),
+      errors: selectors.errors.getByAncillaryId(state, ancillaryId),
       guestFormInitialValues: selectors.booking.getGuestData(state),
     };
   },
   dispatch => ({
-    fetchHotelDetail: id => dispatch(actions.hotels.fetchHotelDetail(id)),
+    fetchAncillaryDetail: id => dispatch(actions.ancillaries.fetchAncillaryDetail(id)),
     handleGuestFormSubmit: (values) => {
       dispatch(actions.booking.setGuestData(values));
       dispatch(actions.estimates.recomputeAllPrices(values));
@@ -103,4 +103,4 @@ export default withRouter(connect(
       dispatch(actions.booking.cancelBooking(values));
     },
   }),
-)(Hotel));
+)(Ancillary));

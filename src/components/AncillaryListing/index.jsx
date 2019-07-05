@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 
 import Masonry from 'react-masonry-css';
 
-import HotelListingItem from '../HotelListingItem';
+import AncillaryListingItem from '../AncillaryListingItem';
 
-const HotelListing = ({
-  hotels, estimates, isLoadingMore, showMore, fetchMoreHotels,
+const AncillaryListing = ({
+  ancillaries, estimates, isLoadingMore, showMore, fetchMoreAncillaries,
 }) => {
-  const hotelItems = hotels.map(hotel => (
-    <HotelListingItem key={hotel.id} hotel={hotel} estimates={estimates[hotel.id]} />
+  const ancillaryItems = ancillaries.map(ancillary => (
+    <AncillaryListingItem key={ancillary.id} ancillary={ancillary} estimates={estimates[ancillary.id]} />
   ));
 
   const breakpointColumnsObj = {
@@ -21,22 +21,22 @@ const HotelListing = ({
 
   return (
     <div>
-      {hotels.length
+      {ancillaries.length
         ? (
           <Masonry
             breakpointCols={breakpointColumnsObj}
             className="masonry-grid"
             columnClassName="masonry-grid__col"
           >
-            {hotelItems}
+            {ancillaryItems}
           </Masonry>
         )
-        : <h2 className="h3 text-muted text-center">No hotels here at the moment.</h2>
+        : <h2 className="h3 text-muted text-center">No ancillaries here at the moment.</h2>
       }
       {showMore && (
       <div className="row text-center">
         <div className="col-12">
-          <button type="button" className={`btn btn-secondary ${isLoadingMore ? 'disabled' : ''}`} onClick={fetchMoreHotels} disabled={isLoadingMore}>
+          <button type="button" className={`btn btn-secondary ${isLoadingMore ? 'disabled' : ''}`} onClick={fetchMoreAncillaries} disabled={isLoadingMore}>
             {isLoadingMore ? (
               <span>
                 <i className="mdi mdi-loading mdi-spin text-light" />
@@ -52,12 +52,12 @@ const HotelListing = ({
   );
 };
 
-HotelListing.propTypes = {
-  hotels: PropTypes.instanceOf(Array).isRequired,
+AncillaryListing.propTypes = {
+  ancillaries: PropTypes.instanceOf(Array).isRequired,
   isLoadingMore: PropTypes.bool.isRequired,
   showMore: PropTypes.bool.isRequired,
-  fetchMoreHotels: PropTypes.func.isRequired,
+  fetchMoreAncillaries: PropTypes.func.isRequired,
   estimates: PropTypes.instanceOf(Object).isRequired,
 };
 
-export default HotelListing;
+export default AncillaryListing;

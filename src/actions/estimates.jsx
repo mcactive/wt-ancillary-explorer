@@ -1,14 +1,14 @@
 import dayjs from 'dayjs';
 import { prices, availability } from '@windingtree/wt-pricing-algorithms';
-import { fetchHotelRatePlans, fetchHotelRoomTypes, fetchHotelAvailability } from './hotels';
+import { fetchAncillaryRatePlans, fetchAncillaryRoomTypes, fetchAncillaryAvailability } from './ancillaries';
 
-export const recomputeHotelEstimates = ({ id }) => (dispatch, getState) => {
+export const recomputeAncillaryEstimates = ({ id }) => (dispatch, getState) => {
   const state = getState();
-  const hotel = state.hotels.list.find(h => h.id === id);
-  if (!hotel) {
+  const ancillary = state.ancillaries.list.find(h => h.id === id);
+  if (!ancillary) {
     return;
   }
-  if (!hotel.roomTypes || !hotel.ratePlans) {
+  if (!ancillary.roomTypes || !ancillary.ratePlans) {
     return;
   }
   const { guest: guestData } = state.booking;
@@ -23,9 +23,9 @@ export const recomputeHotelEstimates = ({ id }) => (dispatch, getState) => {
   }
 
   const computer = new prices.PriceComputer(
-    hotel.roomTypes,
-    hotel.ratePlans,
-    hotel.currency,
+    ancillary.roomTypes,
+    ancillary.ratePlans,
+    ancillary.currency,
   );
 
   const pricingEstimates = computer.getBestPrice(
@@ -44,13 +44,13 @@ export const recomputeHotelEstimates = ({ id }) => (dispatch, getState) => {
     });
   });
 
-  const quantities = hotel.availability && hotel.availability.items
+  const quantities = ancillary.availability && ancillary.availability.items
     ? availability.computeAvailability(
       guestData.arrival,
       guestData.departure,
       guestData.guests.length,
-      hotel.roomTypes,
-      hotel.availability.items,
+      ancillary.roomTypes,
+      ancillary.availability.items,
     ) : [];
   dispatch({
     type: 'SET_ESTIMATES',
@@ -66,36 +66,36 @@ export const recomputeHotelEstimates = ({ id }) => (dispatch, getState) => {
   });
 };
 
-export const fetchAndComputeHotelEstimates = ({
+export const fetchAndComputeAncillaryEstimates = ({
   id, ratePlans, roomTypes, availabilityData,
 }) => (dispatch) => {
   let ratePlansPromise;
   let roomTypesPromise;
   let availabilityPromise;
-  // Do not hit hotels with rate plans already downloaded
+  // Do not hit ancillaries with rate plans already downloaded
   if (ratePlans) {
     ratePlansPromise = Promise.resolve();
   } else {
     // silent catch, the errors are dealt with in appropriate reducers
-    ratePlansPromise = dispatch(fetchHotelRatePlans({ id })).catch(() => {});
+    ratePlansPromise = dispatch(fetchAncillaryRatePlans({ id })).catch(() => {});
   }
-  // Do not hit hotels with room types already downloaded
+  // Do not hit ancillaries with room types already downloaded
   if (roomTypes) {
     roomTypesPromise = Promise.resolve();
   } else {
     // silent catch, the errors are dealt with in appropriate reducers
-    roomTypesPromise = dispatch(fetchHotelRoomTypes({ id })).catch(() => {});
+    roomTypesPromise = dispatch(fetchAncillaryRoomTypes({ id })).catch(() => {});
   }
-  // Do not hit hotels with availability already downloaded
+  // Do not hit ancillaries with availability already downloaded
   if (availabilityData) {
     availabilityPromise = Promise.resolve();
   } else {
     // silent catch, the errors are dealt with in appropriate reducers
-    availabilityPromise = dispatch(fetchHotelAvailability({ id })).catch(() => {});
+    availabilityPromise = dispatch(fetchAncillaryAvailability({ id })).catch(() => {});
   }
-  // for each hotel in parallel get rate plan, room types, availability and recompute estimates
+  // for each ancillary in parallel get rate plan, room types, availability and recompute estimates
   return Promise.all([ratePlansPromise, roomTypesPromise, availabilityPromise])
-    .then(() => dispatch(recomputeHotelEstimates({ id })));
+    .then(() => dispatch(recomputeAncillaryEstimates({ id })));
 };
 
 export const recomputeAllPrices = ({
@@ -103,7 +103,7 @@ export const recomputeAllPrices = ({
 }) => (dispatch, getState) => {
   // Collect all rate plans
   const state = getState();
-  const ratePlansPromises = state.hotels.list.map(h => dispatch(fetchAndComputeHotelEstimates(h)));
+  const ratePlansPromises = state.ancillaries.list.map(h => dispatch(fetchAndComputeAncillaryEstimates(h)));
   // Wait for everything and enable form resubmission
   Promise.all(ratePlansPromises).then(() => {
     _formActions.setSubmitting(false);
@@ -112,6 +112,6 @@ export const recomputeAllPrices = ({
 
 export default {
   recomputeAllPrices,
-  recomputeHotelEstimates,
-  fetchAndComputeHotelEstimates,
+  recomputeAncillaryEstimates,
+  fetchAndComputeAncillaryEstimates,
 };

@@ -12,7 +12,7 @@ import { Route, Switch } from 'react-router-dom';
 
 import reducers from '../reducers';
 // Lazy loaded route with attributes is working in a weird way
-import Hotel from './Hotel';
+import Ancillary from './Ancillary';
 import ErrorPage from './ErrorPage';
 
 import {
@@ -93,7 +93,7 @@ const store = (() => {
 const AppContainer = () => {
   const routes = (
     <Switch>
-      <Route exact path="/hotels/:hotelId" component={Hotel} />
+      <Route exact path="/ancillaries/:ancillaryId" component={Ancillary} />
       <Route exact path="/error-page" component={ErrorPage} />
       <Route exact path="/booking" component={LoadableBookingWizard} />
       <Route exact path="/search-on-map" component={LoadableSearchOnMap} />

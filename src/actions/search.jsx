@@ -41,7 +41,7 @@ const paginatedFetchSearchResults = url => fetch(url)
     return data;
   });
 
-export const byAttributes = createActionThunk('SEARCH_HOTELS', ({ centerCoords, bboxSide, category }) => {
+export const byAttributes = createActionThunk('SEARCH_ANCILLARIES', ({ centerCoords, bboxSide, category }) => {
   const attrs = [];
   if (category) {
     attrs.category = category;

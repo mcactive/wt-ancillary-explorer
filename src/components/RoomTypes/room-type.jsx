@@ -8,9 +8,9 @@ import { QuantityBadge, AvailabilityBadge } from './badges';
 import imagePlaceholder from '../../assets/img/placeholder.png';
 import { roomTypeCategory } from '../../services/enums';
 
-const BookRoomButton = ({ onBookRoomTypeClicked, hotelId, roomTypeId }) => {
+const BookRoomButton = ({ onBookRoomTypeClicked, ancillaryId, roomTypeId }) => {
   const handleClick = () => {
-    onBookRoomTypeClicked({ hotelId, roomTypeId });
+    onBookRoomTypeClicked({ ancillaryId, roomTypeId });
   };
   return (
     <button className="btn btn-primary btn-lg btn-block" type="button" onClick={handleClick}>
@@ -21,7 +21,7 @@ const BookRoomButton = ({ onBookRoomTypeClicked, hotelId, roomTypeId }) => {
 
 BookRoomButton.propTypes = {
   onBookRoomTypeClicked: PropTypes.func.isRequired,
-  hotelId: PropTypes.string.isRequired,
+  ancillaryId: PropTypes.string.isRequired,
   roomTypeId: PropTypes.string.isRequired,
 };
 
@@ -29,7 +29,7 @@ BookRoomButton.propTypes = {
 class RoomType extends React.PureComponent {
   render() {
     const {
-      roomType, estimate, index, hotel, onBookRoomTypeClicked,
+      roomType, estimate, index, ancillary, onBookRoomTypeClicked,
     } = this.props;
 
     const selectedImage = (roomType.images && roomType.images.length)
@@ -73,12 +73,12 @@ class RoomType extends React.PureComponent {
                   <PillList list={roomType.amenities} />
                 </div>
               )}
-              {hotel.bookingUri && estimate.price && estimate.quantity > 0 && (
+              {ancillary.bookingUri && estimate.price && estimate.quantity > 0 && (
                 <div className="card-footer">
                   <BookRoomButton
                     onBookRoomTypeClicked={onBookRoomTypeClicked}
                     roomTypeId={roomType.id}
-                    hotelId={hotel.id}
+                    ancillaryId={ancillary.id}
                   />
                 </div>
               )}
@@ -97,7 +97,7 @@ RoomType.defaultProps = {
 };
 
 RoomType.propTypes = {
-  hotel: PropTypes.instanceOf(Object).isRequired,
+  ancillary: PropTypes.instanceOf(Object).isRequired,
   roomType: PropTypes.instanceOf(Object).isRequired,
   estimate: PropTypes.instanceOf(Object),
   index: PropTypes.number.isRequired,

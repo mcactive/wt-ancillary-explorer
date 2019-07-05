@@ -2,10 +2,10 @@ export function getResults(state) {
   return state.search.results;
 }
 
-export function getSortedResults(state, getHotelById) {
+export function getSortedResults(state, getAncillaryById) {
   return state.search.sortingScores.map(s => Object.assign({}, s, {
-    hotel: getHotelById(state, s.id),
-  })).filter(s => !!s.hotel);
+    ancillary: getAncillaryById(state, s.id),
+  })).filter(s => !!s.ancillary);
 }
 
 export default {

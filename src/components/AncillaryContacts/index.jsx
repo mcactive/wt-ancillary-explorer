@@ -43,19 +43,19 @@ Contact.propTypes = {
   contact: PropTypes.instanceOf(Object).isRequired,
 };
 
-const HotelContacts = ({ contacts }) => (
+const AncillaryContacts = ({ contacts }) => (
   <div>
     <Contact contact={contacts.general} />
   </div>
 );
 
-HotelContacts.propTypes = {
+AncillaryContacts.propTypes = {
   contacts: PropTypes.instanceOf(Object).isRequired,
 };
 
-export default HotelContacts;
+export default AncillaryContacts;
 
 export {
   Contact,
-  HotelContacts,
+  AncillaryContacts,
 };

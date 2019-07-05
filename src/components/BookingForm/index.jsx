@@ -7,7 +7,7 @@ import {
   Formik, Form, Field, FieldArray,
 } from 'formik';
 
-import HotelInfoBox from '../HotelInfoBox';
+import AncillaryInfoBox from '../AncillaryInfoBox';
 import Loader from '../Loader';
 import GuestInfoForm from './guest-info-form';
 import CustomerForm from './customer-form';
@@ -264,7 +264,7 @@ const BookingForm = ({
                   </div>
                 </div>
                 <div className="row">
-                  <HotelInfoBox hotel={hotel} />
+                  <AncillaryInfoBox hotel={hotel} />
                 </div>
               </Form>
               )}

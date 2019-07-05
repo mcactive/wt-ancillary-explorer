@@ -10,7 +10,7 @@ import L from 'leaflet';
 import markerRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png';
 import markerUrl from 'leaflet/dist/images/marker-icon.png';
 import shadowUrl from 'leaflet/dist/images/marker-shadow.png';
-import { Address } from '../HotelLocation';
+import { Address } from '../AncillaryLocation';
 import greenMarkerUrl from '../../assets/img/marker-green.png';
 import greenMarkerRetinaUrl from '../../assets/img/marker-green-2x.png';
 

@@ -1,5 +1,5 @@
-export function getCurrentByHotelId(state, hotelId) {
-  return state.estimates.current[hotelId];
+export function getCurrentByAncillaryId(state, ancillaryId) {
+  return state.estimates.current[ancillaryId];
 }
 
 export function getCurrent(state) {
@@ -7,6 +7,6 @@ export function getCurrent(state) {
 }
 
 export default {
-  getCurrentByHotelId,
+  getCurrentByAncillaryId,
   getCurrent,
 };

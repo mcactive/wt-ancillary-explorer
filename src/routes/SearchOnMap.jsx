@@ -37,12 +37,12 @@ SearchOnMap.propTypes = {
 
 export default connect(
   (state) => {
-    const filterHotels = selectors.hotels.makeHotelFilterByIds();
-    const getHotel = selectors.hotels.makeGetHotelById();
+    const filterAncillaries = selectors.ancillaries.makeAncillaryFilterByIds();
+    const getAncillary = selectors.ancillaries.makeGetAncillaryById();
     const searchResults = selectors.search.getResults(state);
     return {
-      results: filterHotels(state, searchResults),
-      sortedResults: selectors.search.getSortedResults(state, getHotel),
+      results: filterAncillaries(state, searchResults),
+      sortedResults: selectors.search.getSortedResults(state, getAncillary),
       searchError: selectors.errors.getSearch(state),
     };
   },

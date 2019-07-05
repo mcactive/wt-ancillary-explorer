@@ -1,15 +1,15 @@
-import hotels from './hotels';
+import ancillaries from './ancillaries';
 import estimates from './estimates';
 import booking from './booking';
 import search from './search';
 import errors from './errors';
 
-const hotelExplorerApp = {
-  hotels,
+const ancillaryExplorerApp = {
+  ancillaries,
   estimates,
   booking,
   search,
   errors,
 };
 
-export default hotelExplorerApp;
+export default ancillaryExplorerApp;

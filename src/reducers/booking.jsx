@@ -18,7 +18,7 @@ const defaultState = {
     },
   },
   customer: {},
-  hotel: {}, // rooms, cancellationFees
+  ancillary: {}, // rooms, cancellationFees
 };
 
 const reducer = (state = defaultState, action) => {

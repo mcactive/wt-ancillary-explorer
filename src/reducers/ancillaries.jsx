@@ -1,8 +1,8 @@
 const defaultState = {
-  erroredHotels: {},
+  erroredAncillaries: {},
   list: [],
-  hotelsInitialized: false,
-  hotelsLoading: false,
+  ancillariesInitialized: false,
+  ancillariesLoading: false,
   next: null,
 };
 
@@ -21,24 +21,24 @@ const remapErroredIds = list => list
 const reducer = (state = defaultState, action) => {
   let modifiedList;
   let existingIds;
-  let currentErroredHotels;
-  let hotel;
-  let hotelIndex;
+  let currentErroredAncillaries;
+  let ancillary;
+  let ancillaryIndex;
   switch (action.type) {
-    case 'REFETCH_ERRORED_HOTEL_STARTED':
-      currentErroredHotels = Object.assign({}, state.erroredHotels);
-      if (currentErroredHotels[action.payload.id]) {
-        currentErroredHotels[action.payload.id] = 'in-progress';
+    case 'REFETCH_ERRORED_ANCILLARY_STARTED':
+      currentErroredAncillaries = Object.assign({}, state.erroredAncillaries);
+      if (currentErroredAncillaries[action.payload.id]) {
+        currentErroredAncillaries[action.payload.id] = 'in-progress';
       }
       return Object.assign({}, state, {
-        erroredHotels: currentErroredHotels,
+        erroredAncillaries: currentErroredAncillaries,
       });
     case 'FETCH_LIST_STARTED':
       return Object.assign({}, state, {
-        hotelsLoading: true,
+        ancillariesLoading: true,
       });
-    // cache hotels returned with search query for later use
-    case 'SEARCH_HOTELS_SUCCEEDED':
+    // cache ancillaries returned with search query for later use
+    case 'SEARCH_ANCILLARIES_SUCCEEDED':
       modifiedList = [...state.list];
       existingIds = state.list.reduce((acc, h, i) => {
         acc[h.id] = i;
@@ -62,27 +62,27 @@ const reducer = (state = defaultState, action) => {
       }
       return Object.assign({}, state, {
         list: modifiedList,
-        hotelsLoading: false,
-        hotelsInitialized: false,
+        ancillariesLoading: false,
+        ancillariesInitialized: false,
       });
 
     case 'FETCH_LIST_SUCCEEDED':
       if (!action.payload.items) {
         if (action.payload.errors) {
-          currentErroredHotels = remapErroredIds(action.payload.errors);
+          currentErroredAncillaries = remapErroredIds(action.payload.errors);
           return Object.assign({}, state, {
-            erroredHotels: Object.assign({}, state.erroredHotels, currentErroredHotels),
+            erroredAncillaries: Object.assign({}, state.erroredAncillaries, currentErroredAncillaries),
           });
         }
         return state;
       }
 
       if (action.payload.errors) {
-        currentErroredHotels = Object.assign({},
-          state.erroredHotels,
+        currentErroredAncillaries = Object.assign({},
+          state.erroredAncillaries,
           remapErroredIds(action.payload.errors));
       } else {
-        currentErroredHotels = Object.assign({}, state.erroredHotels);
+        currentErroredAncillaries = Object.assign({}, state.erroredAncillaries);
       }
 
       modifiedList = [...state.list];
@@ -105,114 +105,114 @@ const reducer = (state = defaultState, action) => {
             roomTypes: action.payload.items[i].roomTypes,
           }));
         }
-        // Drop successfully refreshed hotel from errored
-        if (currentErroredHotels[action.payload.items[i].id]) {
-          delete currentErroredHotels[action.payload.items[i].id];
+        // Drop successfully refreshed ancillary from errored
+        if (currentErroredAncillaries[action.payload.items[i].id]) {
+          delete currentErroredAncillaries[action.payload.items[i].id];
         }
       }
       return Object.assign({}, state, {
-        erroredHotels: currentErroredHotels,
+        erroredAncillaries: currentErroredAncillaries,
         list: modifiedList,
-        hotelsLoading: false,
-        hotelsInitialized: true,
+        ancillariesLoading: false,
+        ancillariesInitialized: true,
         next: action.payload.next,
       });
     case 'FETCH_DETAIL_STARTED':
       modifiedList = [].concat(state.list);
-      hotel = modifiedList.find(h => h.id === action.payload[0].id);
-      if (!hotel) {
-        hotel = {
+      ancillary = modifiedList.find(h => h.id === action.payload[0].id);
+      if (!ancillary) {
+        ancillary = {
           id: action.payload[0].id,
         };
-        modifiedList.push(hotel);
+        modifiedList.push(ancillary);
       }
-      hotelIndex = modifiedList.indexOf(hotel);
-      hotel.hasDetailLoaded = false;
-      hotel.hasDetailLoading = true;
-      modifiedList[hotelIndex] = hotel;
+      ancillaryIndex = modifiedList.indexOf(ancillary);
+      ancillary.hasDetailLoaded = false;
+      ancillary.hasDetailLoading = true;
+      modifiedList[ancillaryIndex] = ancillary;
       return Object.assign({}, state, {
         list: modifiedList,
       });
     case 'FETCH_DETAIL_SUCCEEDED':
       modifiedList = [].concat(state.list);
-      hotel = modifiedList.find(h => h.id === action.payload.id);
-      if (!hotel) {
+      ancillary = modifiedList.find(h => h.id === action.payload.id);
+      if (!ancillary) {
         return state;
       }
-      hotelIndex = modifiedList.indexOf(hotel);
-      hotel = Object.assign(
+      ancillaryIndex = modifiedList.indexOf(ancillary);
+      ancillary = Object.assign(
         {},
-        hotel,
+        ancillary,
         action.payload,
         {
           roomTypes: action.payload.roomTypes,
         },
       );
-      hotel.hasDetailLoaded = true;
-      hotel.hasDetailLoading = false;
-      modifiedList[hotelIndex] = hotel;
-      currentErroredHotels = Object.assign({}, state.erroredHotels);
+      ancillary.hasDetailLoaded = true;
+      ancillary.hasDetailLoading = false;
+      modifiedList[ancillaryIndex] = ancillary;
+      currentErroredAncillaries = Object.assign({}, state.erroredAncillaries);
 
-      // Drop successfully refreshed hotel from errored
-      if (currentErroredHotels[action.payload.id]) {
-        delete currentErroredHotels[action.payload.id];
+      // Drop successfully refreshed ancillary from errored
+      if (currentErroredAncillaries[action.payload.id]) {
+        delete currentErroredAncillaries[action.payload.id];
       }
 
       return Object.assign({}, state, {
         list: modifiedList,
-        erroredHotels: currentErroredHotels,
+        erroredAncillaries: currentErroredAncillaries,
       });
     case 'FETCH_DETAIL_FAILED':
       modifiedList = state.list.filter(h => h.id !== action.payload.code);
-      currentErroredHotels = Object.assign({}, state.erroredHotels);
+      currentErroredAncillaries = Object.assign({}, state.erroredAncillaries);
       // No other HTTP status gets queued, these are the only states we might
       // potentially recover from
       if (action.payload.status > 499) {
-        currentErroredHotels[action.payload.code] = 'fresh';
+        currentErroredAncillaries[action.payload.code] = 'fresh';
       }
       return Object.assign({}, state, {
-        erroredHotels: currentErroredHotels,
+        erroredAncillaries: currentErroredAncillaries,
         list: modifiedList,
       });
-    case 'FETCH_HOTEL_ROOM_TYPES_SUCCEEDED':
+    case 'FETCH_ANCILLARY_ROOM_TYPES_SUCCEEDED':
       modifiedList = [].concat(state.list);
-      hotel = modifiedList.find(h => h.id === action.payload.id);
-      if (!hotel) {
+      ancillary = modifiedList.find(h => h.id === action.payload.id);
+      if (!ancillary) {
         return state;
       }
-      hotelIndex = modifiedList.indexOf(hotel);
-      hotel = Object.assign({}, hotel, {
+      ancillaryIndex = modifiedList.indexOf(ancillary);
+      ancillary = Object.assign({}, ancillary, {
         roomTypes: action.payload.data,
       });
-      modifiedList[hotelIndex] = hotel;
+      modifiedList[ancillaryIndex] = ancillary;
       return Object.assign({}, state, {
         list: modifiedList,
       });
-    case 'FETCH_HOTEL_RATE_PLANS_SUCCEEDED':
+    case 'FETCH_ANCILLARY_RATE_PLANS_SUCCEEDED':
       modifiedList = [].concat(state.list);
-      hotel = modifiedList.find(h => h.id === action.payload.id);
-      if (!hotel) {
+      ancillary = modifiedList.find(h => h.id === action.payload.id);
+      if (!ancillary) {
         return state;
       }
-      hotelIndex = modifiedList.indexOf(hotel);
-      hotel = Object.assign({}, hotel, {
+      ancillaryIndex = modifiedList.indexOf(ancillary);
+      ancillary = Object.assign({}, ancillary, {
         ratePlans: action.payload.data,
       });
-      modifiedList[hotelIndex] = hotel;
+      modifiedList[ancillaryIndex] = ancillary;
       return Object.assign({}, state, {
         list: modifiedList,
       });
-    case 'FETCH_HOTEL_AVAILABILITY_SUCCEEDED':
+    case 'FETCH_ANCILLARY_AVAILABILITY_SUCCEEDED':
       modifiedList = [].concat(state.list);
-      hotel = modifiedList.find(h => h.id === action.payload.id);
-      if (!hotel) {
+      ancillary = modifiedList.find(h => h.id === action.payload.id);
+      if (!ancillary) {
         return state;
       }
-      hotelIndex = modifiedList.indexOf(hotel);
-      hotel = Object.assign({}, hotel, {
+      ancillaryIndex = modifiedList.indexOf(ancillary);
+      ancillary = Object.assign({}, ancillary, {
         availability: action.payload.data,
       });
-      modifiedList[hotelIndex] = hotel;
+      modifiedList[ancillaryIndex] = ancillary;
       return Object.assign({}, state, {
         list: modifiedList,
       });
